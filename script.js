@@ -2,10 +2,14 @@
 
 let todoList = null;
 let todoForm = null;
-let todoCheckbox = null;
-let todoElementText = null;
+let elementContainer = null;
+let index = null;
+let text = null;
+
+let checkboxInput = null;
+let todoElementCheckbox = null;
+
 let count = 1;
-let progressWidth = 0;
 
 const arr = [];
 
@@ -22,10 +26,52 @@ function addTask(task) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-        todoList = document.querySelector("#todoList");
-        todoForm = document.querySelector("#todoForm");
-        todoCheckbox = document.getElementsByClassName("todoElementCheckbox");
-        todoElementText = document.getElementsByClassName("todoElementText");
+
+        todoList = document.getElementById("todoList");
+        todoForm = document.getElementById("todoForm");
+
+
+        elementContainer = document.createElement("div");
+        elementContainer.classList.add("todoListElement");
+
+        index = document.createElement("h3");
+        index.classList.add("todoElementNumber");
+
+        text = document.createElement("div");
+        text.classList.add("todoElementText");
+
+        checkboxInput = document.createElement("input");
+        checkboxInput.classList.add("todoElementCheckbox");
+        checkboxInput.setAttribute("type", "checkbox");
+
+        elementContainer.appendChild(index);
+        elementContainer.appendChild(text);
+        elementContainer.appendChild(checkboxInput);
+
+        for(let i = 1; i <= 9; i++) {
+
+                elementContainer = document.createElement("div");
+                elementContainer.classList.add("todoListElement");
+        
+                index = document.createElement("h3");
+                index.classList.add("todoElementNumber");
+                index.innerText = i + ")";
+        
+                text = document.createElement("div");
+                text.classList.add("todoElementText");
+                text.setAttribute("id", i);
+        
+                checkboxInput = document.createElement("input");
+                checkboxInput.classList.add("todoElementCheckbox");
+                checkboxInput.setAttribute("type", "checkbox");
+        
+                elementContainer.appendChild(index);
+                elementContainer.appendChild(text);
+                elementContainer.appendChild(checkboxInput);
+
+                todoList.appendChild(elementContainer);
+
+        }
 
         todoForm.addEventListener("submit", function (e) {
                 e.preventDefault();
@@ -43,26 +89,35 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
         });
 
-        for (let i = 0; i < todoCheckbox.length; ++i) {
+        todoElementCheckbox = document.querySelectorAll(".todoElementCheckbox");
+
+        [].forEach.call(todoElementCheckbox, function(el, i) {
 
                 let number = i + 1;
 
-                todoCheckbox[i].addEventListener("change", function (e) {
+                el.addEventListener("change", function() {
+                        const todoCheckbox = this;
 
-                        if (todoCheckbox[i].previousElementSibling.innerHTML !== "") {
-                                todoCheckbox[i].previousElementSibling.innerHTML = "";
+                        const todoText = todoCheckbox.previousElementSibling;
+
+                        if(todoText.innerHTML !== "") {
+                                todoText.innerHTML = "";
                                 setTimeout(() => {
-                                        todoCheckbox[i].checked = false;
+                                        el.checked = false;   
                                 }, 1500);
                                 arr.push(number);
                                 arr.sort(function (a, b) {
                                         return a - b;
                                 });
                         } else {
-                                todoCheckbox[i].checked = false;
+                                el.checked = false;
                         }
                 });
 
-        }
+        });
+
+
+
+
 
 });
